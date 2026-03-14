@@ -1332,7 +1332,7 @@ function ingame(dt) {
             }
             if (cams.cam == 5 && cams.opened && cams.animationTimer[0] >= 0.15) {
                 if (ingameCharacters[i].moveTimer >= 0)
-                    ingameCharacters[i].moveTimer -= dt * (ingameCharacters[i].difficulty / 10 + 1) * 5 * aggression;
+                    ingameCharacters[i].moveTimer -= dt * (ingameCharacters[i].difficulty / 10 + 1) * 7.5 * aggression;
                 ingameCharacters[i].element.style.display = "block";
                 ingameCharacters[i].element.style.left = ingameCharacters[i].positions[ingameCharacters[i].moveFrame[1]][0] * document.getElementById("cameraImage").getBoundingClientRect().width / window.innerWidth - camX - window.innerHeight/1080 + "vw";
                 ingameCharacters[i].element.style.top = ingameCharacters[i].positions[ingameCharacters[i].moveFrame[1]][1] + "vh";
@@ -1662,7 +1662,7 @@ function ingame(dt) {
         } else if (ingameCharacters[i].name == "jinku") {
             if (cams.opened && cams.animationTimer[0] >= 0.15 && !ingameCharacters[i].frame) {
                 ingameCharacters[i].frame = true;
-                if (Math.random() > 0.95 - ingameCharacters[i].difficulty / 100) {
+                if (Math.random() > 0.75) {
                     ingameCharacters[i].active = true;
                     ingameCharacters[i].camChange = cams.cam;
                 }
@@ -1688,7 +1688,7 @@ function ingame(dt) {
             if (!cams.opened) {
                 ingameCharacters[i].frame = false;
             }
-            if (!cams.opened || ingameCharacters[i].camChange != cams.cam) {
+            if (!cams.opened) {
                 if (ingameCharacters[i].active) {
                     die(ingameCharacters[i]);
                     return;
