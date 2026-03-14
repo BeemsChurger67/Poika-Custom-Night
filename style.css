@@ -1,0 +1,412 @@
+body {
+    font-family: cursive;
+    overflow: hidden;
+    background-color: black;
+    user-select: none;
+}
+@font-face {
+    font-family: "upheavtt";
+    src: url(Assets/upheavtt.ttf);
+}
+@font-face {
+    font-family: "digital-7";
+    src: url(Assets/digital-7.ttf);
+}
+@font-face {
+    font-family: "linesFont";
+    src: url(Assets/linesFont.ttf);
+}
+@font-face {
+    font-family: "intenseFont";
+    src: url(Assets/intenseFont.ttf);
+}
+#menu {
+    position: absolute;
+    inset: 0;
+}
+#menuBackground, #menuBackground2 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: url(Assets/starBg.png);
+    width: 100%;
+    height: 100%;
+    filter:brightness(100%) grayscale(100%) opacity(50%);
+}
+#menuBackground2 {
+    filter:brightness(200%) grayscale(100%) opacity(100%);
+}
+#characters {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    left: 40%;
+    top: 50%;
+    transform:translate(-50%,-50%);
+    text-align: center;
+}
+#characterDescription {
+    position: absolute;
+    display: none;
+    left: 10%;
+    top: 10%;
+    width: 300px;
+    height: auto;
+    border: solid white 5px;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 20px;
+}
+.characterImg {
+    border: solid white 5px;
+    border-radius: 20px;
+}
+.upArrow:hover {
+    cursor: pointer;
+}
+.downArrow {
+    cursor: pointer;
+}
+#ingame {
+    display: none;
+    position: absolute;
+    inset: 0;
+}
+.inOffice {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 133vw;
+    height: 100vh;
+    background-size: 133vw 100vh;
+    background-repeat: no-repeat;
+    background-position-x: 50%;
+}
+#office {
+    background-image: url(Assets/office.png);
+}
+#leftDoor {
+    background-image: url(Assets/leftDoor.png);
+}
+#rightDoor {
+    background-image: url(Assets/rightDoor.png);
+}
+#leftVent {
+    display: none;
+    background-image: url(Assets/leftVent.png);
+}
+#rightVent {
+    display: none;
+    background-image: url(Assets/rightVent.png);
+}
+#desk {
+    background-image: url(Assets/table.png);
+    z-index: 1;
+    pointer-events: none;
+}
+#flashlight {
+    background-image: url(Assets/flashlight.png);
+    position: absolute;
+    width: 75vh;
+    height: 75vh;
+    background-size: cover;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    pointer-events: none;
+}
+#vignette {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-size: 100vw 100vh;
+    background-image: url(Assets/vignette.png);
+    pointer-events: none;
+    z-index: 10;
+}
+#textUI {
+    font-family: "digital-7";
+    position: absolute;
+    bottom: 0;
+    font-size: 8vh;
+    color: white;
+    text-shadow: 0px 0px 1.5vh white;
+    opacity: 0.8;
+    z-index: 11;
+}
+#cameraImage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 133vw;
+    height: 100vh;
+    background-size: 133vw 100vh;
+    background-image: url(Assets/Cams/cam0.png);
+    background-repeat: no-repeat;
+}
+#camStatic {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-image: url(Assets/camStatic.gif);
+    background-size: cover;
+    pointer-events: none;
+}
+#mask {
+    position: absolute;
+    left: 0;
+    top: -100vh;
+    width: 100%;
+    height: 100%;
+    background-image: url(Assets/mask.png);
+    background-size: cover;
+    z-index: 3;
+    pointer-events: none;
+}
+#camButtons {
+    position:absolute;
+    width: 60vh;
+    height: 60vh;
+    bottom: 0vh;
+    right: 0vh;
+    z-index: 12;
+    background-size: cover;
+    background-image: url(Assets/layout.png);
+}
+.camButton {
+    font-family: "upheavtt";
+    font-size: 3vh;
+    border: solid black 0.5vh;
+}
+#cam0,#cam1,#cam2,#cam3,#cam4,#cam5,#cam6,#cam7,#cam8 {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+#cam0 {
+    top: 95%;
+    left: 32%;
+}
+#cam1 {
+    top: 95%;
+    left: 67%;
+}
+#cam2 {
+    top: 56%;
+    left: 11%;
+}
+#cam3 {
+    top: 73%;
+    left: 88%;
+}
+#cam4 {
+    top: 42%;
+    left: 50%;
+}   
+#cam5 {
+    top: 35%;
+    left: 40%;
+}
+#cam6 {
+    top: 6%;
+    left: 28%;
+}
+#cam7 {
+    top: 6%;
+    left: 72%;
+}
+#cam8 {
+    top: 26%;
+    left: 14%;
+}
+.camButton:hover {
+    filter: brightness(50%);
+}
+#camOpenAnimation {
+    position: absolute;
+    left: 0; 
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+#rightSideBar {
+    position: absolute;
+    left: 120%;
+    top: 50%;
+    border: solid white 10px;
+    width: 200px;
+    height: 660px;
+    transform: translate(-50%, -50%);
+}
+#deathImage, #killAnim {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+#deathImage {
+    background-size: 100% 100%;
+}
+#killAnim {
+    display: none;
+    background-color: rgb(0,0,0);
+}
+#deathAnimation {
+    display: none;
+}
+#retryButton {
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    transform:translate(-50%, -50%);
+    background-color: red;
+    border: none;
+    padding: 1vh 3vh;
+    font-size: 4vh;
+    border-radius: 1vh;
+    transition: ease 0.1s;
+    font-family: Arial;
+}
+#retryButton:hover {
+    font-size: 5vh;
+}
+#goBackButton {
+    position: absolute;
+    left: 50%;
+    top: 80%;
+    transform:translate(-50%, -50%);
+    background-color: red;
+    border: none;
+    padding: 1vh 3vh;
+    font-size: 4vh;
+    border-radius: 1vh;
+    transition: ease 0.1s;
+    font-family: Arial;
+}
+#goBackButton:hover {
+    font-size: 5vh;
+}
+#blackTransition {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+    z-index: 15;
+}
+#unkkaTeleport {
+    position: absolute;
+    font-family: "upheavtt";
+    font-size: 6vh;
+    border: solid black 0.5vh;
+    background-color: white;
+    top: 37%;
+    right: 1%;
+    transform: translate(0,-50%);
+    z-index:10;
+}
+#unkkaTeleport:hover {
+    background-color: gray;
+}
+#menuStatic {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(Assets/camStatic.gif);
+    background-size: cover;
+    pointer-events: none;
+    opacity: 0;
+}
+#settings {
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    width: 1000px;
+    height: 750px;
+    backdrop-filter: blur(10px);
+    border: solid white 5px;
+    border-radius: 50px;
+    transform: translate(-50%,-50%);
+}
+#beemsaManStatic {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(Assets/redStatic.gif);
+    opacity: 0.3;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 15;
+}
+#true5 {
+    pointer-events: none;
+    opacity: 0;
+}
+#beemsaManTimer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 50vh;
+    width: 100%;
+    text-align: center;
+    font-family: "digital-7";
+    white-space: nowrap;
+    color: red;
+    text-shadow: 0px 0px 5vh red;
+    z-index: 16;
+}
+#beemsaManStart:hover {
+    filter: brightness(150%) contrast(150%);
+}
+#beemsaManMan {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 0);
+    z-index: 15;
+}
+#beemsCutscene {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
+#bcText {
+    font-size: 5vh;
+    font-family: Calibri;
+    color: white;
+    text-shadow: 0px 0px 1vh white;
+}
+#bcButton {
+    background-color: black;
+    border: solid white 0.2vh;
+    font-size: 2vh;
+    color: white;
+}
+#beemsaTimer {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(0,-50%);
+    color: white;
+    text-shadow: 0 0 1vh red;
+    font-size: 5vh;
+}
