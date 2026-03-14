@@ -176,6 +176,7 @@ body {
     z-index: 12;
     background-size: cover;
     background-image: url(Assets/layout.png);
+    pointer-events: none;
 }
 .camButton {
     font-family: "upheavtt";
@@ -186,6 +187,7 @@ body {
     position: absolute;
     transform: translate(-50%, -50%);
     white-space: nowrap;
+    pointer-events: all;
 }
 #cam0 {
     top: 95%;

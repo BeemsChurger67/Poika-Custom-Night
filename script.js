@@ -17,9 +17,9 @@ const soundEffects = {
     bonk: "Assets/SoundEffects/bonk.mp3",
     buzz: "Assets/SoundEffects/buzzSound.mp3",
     aggressiveMode: "Assets/SoundEffects/aggressiveMode.mp3",
-    clock1: "Assets/SoundEffects/clock1.mp3",
-    clock2: "Assets/SoundEffects/clock2.mp3",
-    beemsaMan: "Assets/SoundEffects/beemsaMan.mp3",
+    clock1: "Assets/SoundEffects/Clock1.mp3",
+    clock2: "Assets/SoundEffects/Clock2.mp3",
+    beemsaMan: "Assets/SoundEffects/beemsaman.mp3",
     heartbeat: "Assets/SoundEffects/heartbeat.mp3",
     T12: "Assets/SoundEffects/T12.mp3",
     T1: "Assets/SoundEffects/T1.mp3",
@@ -786,6 +786,7 @@ document.getElementById("ingameCharacters").addEventListener("mousedown", (e) =>
     if (e.target.id.includes("bk")) {
         removebkNumber[0] = e.target.dataset.value;
         removebkNumber[1] = true;
+        console.log(e.target.id);
     }
 });
 let merkzKill = false;
@@ -2138,7 +2139,6 @@ function ingame(dt) {
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
                 ingameCharacters[i].moveTimer = 0;
-                ingameCharacters[i].bksAdded++;
                 ingameCharacters.push({name: "bk" + ingameCharacters[i].bksAdded});
                 const bk = document.createElement("img");
                 bk.draggable = false;
@@ -2146,8 +2146,9 @@ function ingame(dt) {
                 bk.id = "character_bk" + ingameCharacters[i].bksAdded;
                 bk.dataset.value = ingameCharacters[i].bksAdded;
                 bk.src = ingameCharacters[i].img;
-                ingameCharacters[i].bkElements.push([bk, Math.random() * 50 + 25, Math.random() * 50 + 25, Math.round(Math.random() * 8), 0]);
+                ingameCharacters[i].bkElements.push([bk, Math.random() * 50 + 25, Math.random() * 50 + 25, Math.round(Math.random() * 8), 0, bk.dataset.value]);
                 document.getElementById("ingameCharacters").appendChild(ingameCharacters[i].bkElements[ingameCharacters[i].bkElements.length-1][0]);
+                ingameCharacters[i].bksAdded++;
             }
             for (let a = 0; a<ingameCharacters[i].bkElements.length; a++) {
                 ingameCharacters[i].bkElements[a][4] += dt;
@@ -2164,7 +2165,6 @@ function ingame(dt) {
                     ingameCharacters[i].bkElements[a][0].style.height = 20 * 1.5 + "vh";
                 }
                 if (removebkNumber[1]) {
-                    console.log(ingameCharacters[i].bkElements[a][0].id);
                     console.log(ingameCharacters[i].bkElements[a][0].dataset.value, removebkNumber[0]);
                     if (ingameCharacters[i].bkElements[a][0].dataset.value == removebkNumber[0]) {
                         const index = ingameCharacters.findIndex(c => c.name === "bk" + ingameCharacters[i].bkElements[a][0].dataset.value);
@@ -2177,8 +2177,8 @@ function ingame(dt) {
                         return;
                     }
                 }
-                removebkNumber[1] = false;
             }
+            removebkNumber[1] = false;
         }
     }
     document.getElementById("blackTransition").style.opacity = blackTransitionOpacity;
