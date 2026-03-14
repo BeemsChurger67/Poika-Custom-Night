@@ -235,8 +235,8 @@ let characters = [
         difficulty: 0,
         camChange: 0,
         element: null,
-        description: "Has a 5% chance to appear when you open cams and when he does you have to look at him for 0.5 seconds to make him go away.",
-        hyperDescription: "Hyper: Has a 10% chance to appear in the cams when you open it and when he does you have to type jinku in a textbox to avoid his jumpscare."
+        description: "Has a 25% chance to appear when you open cams and when he does you have to look at him for 0.5 seconds to make him go away.",
+        hyperDescription: "Hyper: Now has a 50% chance to appear and if you switch cams you die immediatly. Pretty annoying."
     },
     {
         name: "aateepee",
