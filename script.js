@@ -877,6 +877,7 @@ function spawnCharacter(cName, difficulty) {
                 ic.kikkiElements = [];
             } else if (ic.name == "jinku") {
                 document.getElementById("jinkuType").style.display = "none";
+                document.getElementById("jinkuType").style.zIndex = 2;
             } else if (ic.name == "merkz") {
                 ic.element.style.zIndex = "15";
             } else if (ic.name == "rain") {
