@@ -11,6 +11,8 @@ const soundEffects = {
     unkkaVoiceline:  "Assets/SoundEffects/unkkaVoiceline.mp3",
     neliöDeath:  "Assets/SoundEffects/neliöDeath.mp3",
     neliöVoiceline:  "Assets/SoundEffects/neliöVoiceline.mp3",
+    shobDeath:  "Assets/SoundEffects/shobDeath.mp3",
+    shobVoiceline:  "Assets/SoundEffects/shobVoiceline.mp3",
     aateepeeLeft: "Assets/SoundEffects/aateepeeLeft.mp3",
     aateepeeRight: "Assets/SoundEffects/aateepeeRight.mp3",
     jerpa: "Assets/SoundEffects/jerpa.mp3",
@@ -80,7 +82,7 @@ let characters = [
         rekkuElement: null,
         voiceLine: soundEffects.unkkaVoiceline,
         description: "Unkka is hunting his dog but you dont want that to happen. You have to teleport the dog into another cam by pressing teleport button in the cams to another cam before unkka gets his dog back.",
-        hyperDescription: "Hyper: Unkkas killtime is smaller.",
+        hyperDescription: "Hyper: Theres no sound cue anymore.",
     },
     {
         name: "hunajameloni",
@@ -333,7 +335,7 @@ let characters = [
     },
 ];
 let beemsaManCharacters = [
-    /*{
+    {
         name: "beemsaManLDoor",
         moveTimer: 0,
         moveTime: 22,
@@ -413,7 +415,7 @@ let beemsaManCharacters = [
         img: "Assets/Characters/beems.png",
         difficulty: 20,
         element: null,
-    },*/
+    },
     {
         name: "beemsaKidSpawner",
         moveTimer: 0,
@@ -520,6 +522,17 @@ window.addEventListener("keypress", (e) => {
         }
     };
 });
+let info = false;
+document.getElementById("infoButton").addEventListener("mousedown", () => {
+    info = !info;
+    if (info) {
+        document.getElementById("info").classList.add("active");
+        document.getElementById("info").classList.remove("inactive");
+    } else {
+        document.getElementById("info").classList.remove("active");
+        document.getElementById("info").classList.add("inactive");
+    }
+});
 window.addEventListener("keydown", (e) => {
     keys[e.key.toLowerCase()] = true;
 });
@@ -545,6 +558,22 @@ document.getElementById("rightSideBar").addEventListener("mousedown", (e) => {
     if (e.target.id == "startButton") {
         scene = "cutscene";
         blackTransitionOpacity = 1;
+    }
+    if (e.target.id == "all+1") {
+        for (let i = 0; i<characters.length; i++) {
+            if (characters[i].difficulty < 20) {
+                characters[i].difficulty++;
+                document.getElementById(i + "").textContent = characters[i].difficulty;
+            }
+        }
+    }
+    if (e.target.id == "all-1") {
+        for (let i = 0; i<characters.length; i++) {
+            if (characters[i].difficulty > 0) {
+                characters[i].difficulty--;
+                document.getElementById(i + "").textContent = characters[i].difficulty;
+            }
+        }
     }
     if (e.target.id == "all0") {
         for (let i = 0; i<characters.length; i++) {
@@ -669,16 +698,16 @@ document.getElementById("characters").addEventListener("mousedown", (e) => {
     }
 });
 let achievementNames = [
-    ["AC_1", "Beat Easycide, pretty easy right?", false],
-    ["AC_2", "Beat Hyper Easycide, now its a bit harder", false],
-    ["AC_3", "Beat Aggressive Easycide, thats kinda hard", false],
-    ["AC_4", "Beat Hyper Aggressive Easycide, thats hard", false],
-    ["AC_5", "Beat Easycide all challenges, thats really hard", false],
-    ["AC_6", "Beat Poikacide, the base max mode", false],
-    ["AC_7", "Beat Hyper Poikacide, the base max mode but buffed", false],
-    ["AC_8", "Beat Aggressive Poikacide, the base max mode but everyone is like 1.5x faster", false],
-    ["AC_9", "Beat Genopoikacide, dang now thats a max mode.", false],
-    ["AC_10", "Beat Silent Pneogenopoikacide All Challenges, How.?", false],
+    ["AC_1", "Beat Easycide, pretty easy right?", false, "Easycide Conquered"],
+    ["AC_2", "Beat Hyper Easycide, now its a bit harder", false, "ez Hypercide basically"],
+    ["AC_3", "Beat Aggressive Easycide, thats kinda hard", false, "Ts hard achievement"],
+    ["AC_4", "Beat Hyper Aggressive Easycide, thats hard", false, "Almost there!"],
+    ["AC_5", "Beat Easycide all challenges, thats really hard", false, "The hardest max mode of Easycide"],
+    ["AC_6", "Beat Poikacide, the base max mode", false, "Congrats on the base max mode"],
+    ["AC_7", "Beat Hyper Poikacide, the base max mode but buffed", false, "Peakcide"],
+    ["AC_8", "Beat Aggressive Poikacide, the base max mode but everyone is like 1.5x faster", false, "Hardcide"],
+    ["AC_9", "Beat Genopoikacide, dang now thats a max mode.", false, "Ts impossible lowk idk how you did ts"],
+    ["AC_10", "Beat Silent Pneogenopoikacide All Challenges, How.?", false, "Wtf.?"],
     ["AC_11", "Beemsa Man", false],
     ["AC_12", "Hyper Beemsa Man", false],
     ["AC_13", "Aggressive Beemsa Man", false],
@@ -689,6 +718,7 @@ let achievementNames = [
     ["AC_18", "Aggressive Eternal Beemsa Man", false],
     ["AC_19", "Hyper Aggressive Eternal Beemsa Man", false],
     ["AC_20", "Hyper Aggressive Eternal Beemsa Man Long Nights", false],
+    ["AC_21", "Beat Hopeless Beemsuit, the hardest max mode. How the hell did you even do this :sob:", false],
 ];
 for (let i = 1; i<achievementNames.length+1; i++) {
     document.getElementById("AC_" + i).style.display = "none";
@@ -713,7 +743,7 @@ document.getElementById("characters").addEventListener("mouseover", (e) => {
 
     for (let i = 0; i<achievementNames.length; i++) {
         if (e.target.id == achievementNames[i][0]) {
-            document.getElementById("cdName").textContent = "Achievement " + (i+1);
+            document.getElementById("cdName").textContent = achievementNames[i][3];
             document.getElementById("cdDescription").textContent = achievementNames[i][1];
             document.getElementById("characterDescription").style.display = "block";
         }
@@ -846,7 +876,7 @@ function spawnCharacter(cName, difficulty) {
                     ic.direction = "right";
             } else if (ic.name == "unkka") {
                 document.getElementById("unkkaTeleport").style.display = "block";
-                ingameCharacters[i].rekkuCam = 0;
+                rekkuCam = 0;
                 ingameCharacters.push({name: "rekku"});
                 const rekku = document.createElement("img");
                 rekku.draggable = false;
@@ -875,9 +905,6 @@ function spawnCharacter(cName, difficulty) {
                 ic.element.style = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; z-index: 10; pointer-events: none;";
             } else if (ic.name == "kikkimöö") {
                 ic.kikkiElements = [];
-            } else if (ic.name == "jinku") {
-                document.getElementById("jinkuType").style.display = "none";
-                document.getElementById("jinkuType").style.zIndex = 2;
             } else if (ic.name == "merkz") {
                 ic.element.style.zIndex = "15";
             } else if (ic.name == "rain") {
@@ -934,7 +961,7 @@ function ingame(dt) {
             } else if (ingameCharacters[i].name == "unkka") {
                 document.getElementById("unkkaTeleport").style.display = "block";
                 ingameCharacters.push({name: "rekku"});
-                ingameCharacters[i].rekkuCam = 0;
+                rekkuCam = 0;
                 const rekku = document.createElement("img");
                 rekku.draggable = false;
                 rekku.style = "position: absolute; left: 0; top: 0; transform: translate(-50%, -50%);";
@@ -1219,11 +1246,12 @@ function ingame(dt) {
         maskTop -= 1000 * dt;
     }
     document.getElementById("mask").style.top = maskTop + "vh";
+    const hyperChecked = document.getElementById("hyperCB").checked;
     for (let i = 0; i<ingameCharacters.length; i++) {
         if (ingameCharacters[i].name == "beems") {
             ingameCharacters[i].element.style.display = "none";
             if (ingameCharacters[i].moveFrame[0] != ingameCharacters[i].moveFrame[1]) {
-                camStaticOpacity = 1; 
+                camStaticOpacity = 1;
             }
             ingameCharacters[i].moveFrame[1] = Math.floor(ingameCharacters[i].moveTimer / ingameCharacters[i].moveTime * ingameCharacters[i].camFrames.length)
             if (ingameCharacters[i].moveFrame[1] <= ingameCharacters[i].camFrames.length-1) {
@@ -1249,8 +1277,11 @@ function ingame(dt) {
                     ingameCharacters[i].element.style.display = "none";
                 }
             }
-            ingameCharacters[i].moveFrame[0] = ingameCharacters[i].moveFrame[1]
-            ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
+            ingameCharacters[i].moveFrame[0] = ingameCharacters[i].moveFrame[1];
+            if (hyperChecked)
+                ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression * 2;
+            else
+                ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             const doorClosed = ingameCharacters[i].direction == "left" ? !doors[0] : !doors[1];
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && doorClosed) {
                 ingameCharacters[i].killTimer += dt * (ingameCharacters[i].difficulty / 15 + 1);
@@ -1309,7 +1340,7 @@ function ingame(dt) {
                     camStaticOpacity = 1;
                 }
             } else {
-                if (ingameCharacters[i].killTimer <= 0.1) {
+                if (ingameCharacters[i].killTimer <= 0.1 && !hyperChecked) {
                     soundEffects.unkkaFound.play();
                 }
                 ingameCharacters[i].killTimer += dt;
@@ -1539,13 +1570,16 @@ function ingame(dt) {
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
                 if (!ingameCharacters[i].active) {
-                    for (let a = 0; a<1; a++) {
-                        let randomCam = Math.floor(Math.random() * 8)
-                        if (ingameCharacters[i].cams.includes(randomCam)) {
-                            a -= 1;
-                            randomCam = Math.floor(Math.random() * 8);
+                    if (hyperChecked) {
+                        for (let a = 0; a<3; a++) {
+                            let randomCam = Math.round(Math.random() * 8);
+                            while (!ingameCharacters[i].cams.includes(randomCam) && ingameCharacters[i].cams.length != 0) {
+                                randomCam = Math.round(Math.random() * 8);
+                            }
+                            ingameCharacters[i].cams.push(Math.round(Math.random() * 8));
                         }
-                        ingameCharacters[i].cams.push(Math.floor(Math.random() * 8));
+                    } else {
+                        ingameCharacters[i].cams.push(Math.round(Math.random() * 8));
                     }
                     ingameCharacters[i].active = true;
                     for (let a = 0; a<ingameCharacters[i].cams.length; a++) {
@@ -1562,8 +1596,7 @@ function ingame(dt) {
                 for (let a = 0; a<ingameCharacters[i].cams.length; a++) {
                     if (cams.cam == ingameCharacters[i].cams[a]) {
                         document.getElementById("cam" + ingameCharacters[i].cams[a]).style.border = "solid black 0.5vh";
-                        const indexToRemove = ingameCharacters[i].cams.indexOf(cams.cam, 1);
-                        ingameCharacters[i].cams.splice(indexToRemove, 1);
+                        ingameCharacters[i].cams.splice(a, 1);
                     }
                 }
                 if (ingameCharacters[i].cams.length == 0) {
@@ -1572,6 +1605,7 @@ function ingame(dt) {
                     ingameCharacters[i].killTimer = 0;
                 }
             }
+            console.log(ingameCharacters[i].cams);
         } else if (ingameCharacters[i].name == "vallufinland") {
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
@@ -1633,6 +1667,8 @@ function ingame(dt) {
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && !vents[0]) {
                 ingameCharacters[i].element.style.left = 46.5 -mx / window.innerWidth * 33 + "vw";
                 ingameCharacters[i].element.style.top = 65 + "vh";
+                ingameCharacters[i].element.style.width = "20vh";
+                ingameCharacters[i].element.style.height = "20vh";
             } else {
                 soundEffects.aatosliina.pause();
                 soundEffects.aatosliina.currentTime = 0;
@@ -1786,6 +1822,8 @@ function ingame(dt) {
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && !vents[1]) {
                 ingameCharacters[i].element.style.left = 86.4 -mx / window.innerWidth * 33 + "vw";
                 ingameCharacters[i].element.style.top = 36 + "vh";
+                ingameCharacters[i].element.style.width = "20vh";
+                ingameCharacters[i].element.style.height = "20vh";
             }
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && !vents[1] && !cams.opened) {
                 ingameCharacters[i].element.style.display = "block";
@@ -2351,11 +2389,11 @@ function sixAm(dt) {
         checkIfAchievement("Aggressive Easycide", 2);
         checkIfAchievement("Aggressive Hyper Easycide", 3);
         checkIfAchievement("Aggressive Hyper Easycide Long Nights", 4);
-        checkIfAchievement(" Poikacide", 0);
-        checkIfAchievement(" Hyper Poikacide", 1);
-        checkIfAchievement("Aggressive Poikacide", 2);
-        checkIfAchievement("Aggressive Hyper Poikacide", 3);
-        checkIfAchievement("Aggressive Hyper Poikacide Long Nights", 4);
+        checkIfAchievement(" Poikacide", 5);
+        checkIfAchievement(" Hyper Poikacide", 6);
+        checkIfAchievement("Aggressive Poikacide", 7);
+        checkIfAchievement("Aggressive Hyper Poikacide", 8);
+        checkIfAchievement("Aggressive Hyper Poikacide Long Nights", 9);
     }
     document.getElementById("beemsaManTimer").style.display = "none";
     soundEffects.alarm.play();

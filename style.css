@@ -1,5 +1,5 @@
 body {
-    font-family: cursive;
+    font-family: "Comic Sans MS";
     overflow: hidden;
     background-color: black;
     user-select: none;
@@ -47,7 +47,7 @@ body {
     text-align: center;
 }
 #characterDescription {
-    position: absolute;
+    position: sticky;
     display: none;
     left: 10%;
     top: 10%;
@@ -56,6 +56,7 @@ body {
     border: solid white 5px;
     background-color: rgba(0,0,0,0.5);
     border-radius: 20px;
+    transform: translate(10px, 10px);
 }
 .characterImg {
     border: solid white 5px;
@@ -331,17 +332,26 @@ body {
     pointer-events: none;
     opacity: 0;
 }
-#settings {
+#info {
     position: absolute;
-    display: none;
-    left: 50%;
-    top: 50%;
+    left: 40%;
+    top: -100%;
     width: 1000px;
     height: 750px;
     backdrop-filter: blur(10px);
+    text-align: center;
+    background-color: rgba(0,0,0,0.5);
     border: solid white 5px;
     border-radius: 50px;
+    color: white;
     transform: translate(-50%,-50%);
+    transition: ease 0.5s;
+}
+#info.active {
+    top: 50%;
+}
+#info.inactive {
+    top: -100%;
 }
 #beemsaManStatic {
     position: absolute;
