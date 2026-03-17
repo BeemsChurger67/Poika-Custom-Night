@@ -986,8 +986,6 @@ function ingame(dt) {
                 ingameCharacters[i].element.style = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; z-index: 10; pointer-events: none;";
             } else if (ingameCharacters[i].name == "kikkimöö") {
                 ingameCharacters[i].kikkiElements = [];
-            } else if (ingameCharacters[i].name == "jinku") {
-                document.getElementById("jinkuType").style.display = "none";
             } else if (ingameCharacters[i].name == "merkz") {
                 ingameCharacters[i].element.style.zIndex = "15";
             } else if (ingameCharacters[i].name == "jape") {
