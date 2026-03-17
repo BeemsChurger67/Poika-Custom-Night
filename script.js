@@ -92,8 +92,8 @@ let characters = [
         difficulty: 0,
         element: null,
         positions: [
+            [51,55,15],
             [50,50,30],
-            [50,50,40],
             [40,50,45],
             [30,55,50],
         ],
@@ -722,9 +722,6 @@ let achievementNames = [
 ];
 for (let i = 1; i<achievementNames.length+1; i++) {
     document.getElementById("AC_" + i).style.display = "none";
-}
-for (let i = 0; i<achievementNames.length; i++) {
-    achievementNames[i][2] = true;
 }
 document.getElementById("characters").addEventListener("mouseover", (e) => {
     if (e.target.classList.contains("characterImg")) {
@@ -2381,6 +2378,29 @@ function checkIfAchievement(name, number) {
         }
     }
 }
+achievementNames = [
+    ["AC_1", "Beat Easycide, pretty easy right?", false, "Easycide Conquered"],
+    ["AC_2", "Beat Hyper Easycide, now its a bit harder", false, "ez Hypercide basically"],
+    ["AC_3", "Beat Aggressive Easycide, thats kinda hard", false, "Ts hard achievement"],
+    ["AC_4", "Beat Hyper Aggressive Easycide, thats hard", false, "Almost there!"],
+    ["AC_5", "Beat Easycide all challenges, thats really hard", false, "The hardest max mode of Easycide"],
+    ["AC_6", "Beat Poikacide, the base max mode", false, "Congrats on the base max mode"],
+    ["AC_7", "Beat Hyper Poikacide, the base max mode but buffed", false, "Peakcide"],
+    ["AC_8", "Beat Aggressive Poikacide, the base max mode but everyone is like 1.5x faster", false, "Hardcide"],
+    ["AC_9", "Beat Genopoikacide, dang now thats a max mode.", false, "Ts impossible lowk idk how you did ts"],
+    ["AC_10", "Beat Silent Pneogenopoikacide All Challenges, How.?", false, "Wtf.?"],
+    ["AC_11", "Beemsa Man", false],
+    ["AC_12", "Hyper Beemsa Man", false],
+    ["AC_13", "Aggressive Beemsa Man", false],
+    ["AC_14", "Hyper Aggressive Beemsa Man", false],
+    ["AC_15", "Hyper Aggressive Beemsa Man Long Nights", false],
+    ["AC_16", "Eternal Beemsa Man", false],
+    ["AC_17", "Hyper Eternal Beemsa Man", false],
+    ["AC_18", "Aggressive Eternal Beemsa Man", false],
+    ["AC_19", "Hyper Aggressive Eternal Beemsa Man", false],
+    ["AC_20", "Hyper Aggressive Eternal Beemsa Man Long Nights", false],
+    ["AC_21", "Beat Hopeless Beemsuit, the hardest max mode. How the hell did you even do this :sob:", false],
+];
 function sixAm(dt) {
     console.log(document.getElementById("csCenterText").textContent);
     if (!sixAmFirstFrame) {
@@ -2394,6 +2414,17 @@ function sixAm(dt) {
         checkIfAchievement("Aggressive Poikacide", 7);
         checkIfAchievement("Aggressive Hyper Poikacide", 8);
         checkIfAchievement("Aggressive Hyper Poikacide Long Nights", 9);
+        checkIfAchievement(" Beemsa Man", 10);
+        checkIfAchievement(" Hyper Beemsa man", 11);
+        checkIfAchievement("Aggressive Beemsa man", 12);
+        checkIfAchievement("Aggresssive Hyper Beemsa man", 13);
+        checkIfAchievement("Aggressive Hyper Beemsa man Long Nights", 14);
+        checkIfAchievement(" Eternal Beemsa Man", 15);
+        checkIfAchievement(" Hyper Eternal Beemsa man", 16);
+        checkIfAchievement("Aggressive Eternal Beemsa man", 17);
+        checkIfAchievement("Aggressive Hyper Eternal Beemsa man", 18);
+        checkIfAchievement("Aggressive Hyper Eternal Beemsa man Long Nights", 19);
+        checkIfAchievement("Hopeless Beemsuit", 20);
     }
     document.getElementById("beemsaManTimer").style.display = "none";
     soundEffects.alarm.play();
@@ -2474,7 +2505,7 @@ function cutsceneToNight(dt) {
     }
     cutsceneTime[0] += dt;
     document.getElementById("csCenterText").style.fontSize = textScale + 500 + "%";
-    textScale /= dt * 175;
+    textScale /= dt * 175;  
     if (cutsceneTime[0] >= cutsceneTime[1] / 2) {
         textFade -= dt;
         document.getElementById("csCenterText").style.opacity = textFade;
