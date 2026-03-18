@@ -210,7 +210,7 @@ let characters = [
         difficulty: 0,
         element: null,
         kikkiElements: [],
-        description: "Kikkimöös will spawn in the office often and you need to click them to get rid of them. If there are more than 5 you will die.",
+        description: "Kikkimöös will spawn in the office often and you need to click them to get rid of them. If there are more than 4 you will die. You also have to click them in order lol.",
         hyperDescription: "Hyper: they appear more often."
     },
     {
@@ -338,11 +338,12 @@ let beemsaManCharacters = [
     {
         name: "beemsaManLDoor",
         moveTimer: 0,
-        moveTime: 22,
+        moveTime: 40,
         killTimer: 0,
         killTime: 10,
         leaveTimer: 0,
         leaveTime: 0.5,
+        camFrame: false,
         img: "Assets/Characters/beems.png",
         difficulty: 20,
         element: null,
@@ -350,11 +351,12 @@ let beemsaManCharacters = [
     {
         name: "beemsaManRDoor",
         moveTimer: 0,
-        moveTime: 26,
+        moveTime: 45,
         killTimer: 0,
         killTime: 10,
         leaveTimer: 0,
         leaveTime: 0.5,
+        camFrame: false,
         img: "Assets/Characters/beems.png",
         difficulty: 20,
         element: null,
@@ -362,11 +364,12 @@ let beemsaManCharacters = [
     {
         name: "beemsaManMask",
         moveTimer: 0,
-        moveTime: 38,
+        moveTime: 50,
         killTimer: 0,
         killTime: 10,
         leaveTimer: 0,
         leaveTime: 0.5,
+        camFrame: false,
         img: "Assets/Characters/beems.png",
         difficulty: 20,
         element: null,
@@ -374,11 +377,12 @@ let beemsaManCharacters = [
     {
         name: "beemsaManFlashlight",
         moveTimer: 0,
-        moveTime: 42,
+        moveTime: 55,
         killTimer: 0,
         killTime: 10,
         flashAmount: [0,7],
         flashing: false,
+        camFrame: false,
         img: "Assets/Characters/beems.png",
         difficulty: 20,
         element: null,
@@ -386,11 +390,12 @@ let beemsaManCharacters = [
     {
         name: "beemsaManLVent",
         moveTimer: 0,
-        moveTime: 30,
+        moveTime: 60,
         killTimer: 0,
         killTime: 10,
         leaveTimer: 0,
         leaveTime: 0.5,
+        camFrame: false,
         img: "Assets/Characters/beems.png",
         difficulty: 20,
         element: null,
@@ -398,11 +403,12 @@ let beemsaManCharacters = [
     {
         name: "beemsaManRVent",
         moveTimer: 0,
-        moveTime: 34,
+        moveTime: 65,
         killTimer: 0,
         killTime: 10,
         leaveTimer: 0,
         leaveTime: 0.5,
+        camFrame: false,
         img: "Assets/Characters/beems.png",
         difficulty: 20,
         element: null,
@@ -411,7 +417,7 @@ let beemsaManCharacters = [
         name: "beemsaManTimer",
         moveTimer: 0, 
         moveTime: 5,
-        killTimer: 3,
+        killTimer: 10,
         img: "Assets/Characters/beems.png",
         difficulty: 20,
         element: null,
@@ -539,7 +545,19 @@ window.addEventListener("keydown", (e) => {
 window.addEventListener("keyup", (e) => {
     keys[e.key.toLowerCase()] = false;
 });
+let hopelessBeemsuit = false;
 document.getElementById("rightSideBar").addEventListener("mousedown", (e) => {
+    if (e.target.id == "HBS") {
+        for (let i = 0; i<characters.length; i++) {
+            characters[i].difficulty = 30;
+        }
+        scene = "cutscene";
+        blackTransitionOpacity = 1;
+        hopelessBeemsuit = true;
+        document.getElementById("aggressiveCB").checked = true;
+        document.getElementById("hyperCB").checked = true;
+        document.getElementById("LNCB").checked = false;
+    }
     if (e.target.id == "beemsaManStart") {
         for (let i = 0; i<characters.length; i++) {
             characters[i].difficulty = 0;
@@ -813,7 +831,6 @@ document.getElementById("ingameCharacters").addEventListener("mousedown", (e) =>
     if (e.target.id.includes("bk")) {
         removebkNumber[0] = e.target.dataset.value;
         removebkNumber[1] = true;
-        console.log(e.target.id);
     }
 });
 let merkzKill = false;
@@ -1514,6 +1531,9 @@ function ingame(dt) {
                 }
                 ingameCharacters[i].camFrame = true;
             }
+            if (!cams.opened) {
+                ingameCharacters[i].camFrame = false;
+            }
             if (ingameCharacters[i].active) {
                 ingameCharacters[i].killTimer += dt * (ingameCharacters[i].difficulty / 5 + 1);
                 if (ingameCharacters[i].killTimer >= ingameCharacters[i].killTime) {
@@ -1600,7 +1620,6 @@ function ingame(dt) {
                     ingameCharacters[i].killTimer = 0;
                 }
             }
-            console.log(ingameCharacters[i].cams);
         } else if (ingameCharacters[i].name == "vallufinland") {
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
@@ -1940,6 +1959,14 @@ function ingame(dt) {
             }
             removeRain = false;
         } else if (ingameCharacters[i].name == "beemsaManLDoor") {
+            if (cams.opened) {
+                if (!ingameCharacters[i].camFrame) {
+                    if (Math.random() > 0.66) {ingameCharacters[i].moveTimer += ingameCharacters[i].moveTime / 1.5}
+                    ingameCharacters[i].camFrame = true;
+                }
+            } else {
+                ingameCharacters[i].camFrame = false;
+            }
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
                 if (!cams.opened) {
@@ -1976,6 +2003,14 @@ function ingame(dt) {
                 }
             }
         } else if (ingameCharacters[i].name == "beemsaManRDoor") {
+            if (cams.opened) {
+                if (!ingameCharacters[i].camFrame) {
+                    if (Math.random() > 0.66) {ingameCharacters[i].moveTimer += ingameCharacters[i].moveTime / 1.5}
+                    ingameCharacters[i].camFrame = true;
+                }
+            } else {
+                ingameCharacters[i].camFrame = false;
+            }
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
                 if (!cams.opened) {
@@ -2012,6 +2047,14 @@ function ingame(dt) {
                 }
             }
         } else if (ingameCharacters[i].name == "beemsaManMask") {
+            if (cams.opened) {
+                if (!ingameCharacters[i].camFrame) {
+                    if (Math.random() > 0.66) {ingameCharacters[i].moveTimer += ingameCharacters[i].moveTime / 1.5}
+                    ingameCharacters[i].camFrame = true;
+                }
+            } else {
+                ingameCharacters[i].camFrame = false;
+            }
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1);
             ingameCharacters[i].element.style.display = "none";
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
@@ -2048,6 +2091,14 @@ function ingame(dt) {
                 }
             }
         } else if (ingameCharacters[i].name == "beemsaManFlashlight") {
+            if (cams.opened) {
+                if (!ingameCharacters[i].camFrame) {
+                    if (Math.random() > 0.66) {ingameCharacters[i].moveTimer += ingameCharacters[i].moveTime / 1.5}
+                    ingameCharacters[i].camFrame = true;
+                }
+            } else {
+                ingameCharacters[i].camFrame = false;
+            }
             ingameCharacters[i].element.style.display = "none";
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
@@ -2085,6 +2136,14 @@ function ingame(dt) {
                 }
             }
         } else if (ingameCharacters[i].name == "beemsaManLVent") {
+            if (cams.opened) {
+                if (!ingameCharacters[i].camFrame) {
+                    if (Math.random() > 0.66) {ingameCharacters[i].moveTimer += ingameCharacters[i].moveTime / 1.5}
+                    ingameCharacters[i].camFrame = true;
+                }
+            } else {
+                ingameCharacters[i].camFrame = false;
+            }
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && !vents[0]) {
                 ingameCharacters[i].killTimer += dt * (ingameCharacters[i].difficulty / 10 + 1);
@@ -2117,6 +2176,14 @@ function ingame(dt) {
                 return;
             }
         } else if (ingameCharacters[i].name == "beemsaManRVent") {
+            if (cams.opened) {
+                if (!ingameCharacters[i].camFrame) {
+                    if (Math.random() > 0.66) {ingameCharacters[i].moveTimer += ingameCharacters[i].moveTime / 1.5}
+                    ingameCharacters[i].camFrame = true;
+                }
+            } else {
+                ingameCharacters[i].camFrame = false;
+            }
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && !vents[1]) {
                 ingameCharacters[i].killTimer += dt * (ingameCharacters[i].difficulty / 10 + 1);
@@ -2199,7 +2266,6 @@ function ingame(dt) {
                     ingameCharacters[i].bkElements[a][0].style.height = 20 * 1.5 + "vh";
                 }
                 if (removebkNumber[1]) {
-                    console.log(ingameCharacters[i].bkElements[a][0].dataset.value, removebkNumber[0]);
                     if (ingameCharacters[i].bkElements[a][0].dataset.value == removebkNumber[0]) {
                         const index = ingameCharacters.findIndex(c => c.name === "bk" + ingameCharacters[i].bkElements[a][0].dataset.value);
                         ingameCharacters.splice(index, 1);
@@ -2499,6 +2565,11 @@ function cutsceneToNight(dt) {
             ifHardestMaxMode = true;
         } else {
             ifHardestMaxMode = false;
+        }
+        if (hopelessBeemsuit) {
+            document.getElementById("csCenterText").textContent = "Hopeless Beemsuit";
+            document.getElementById("csCenterText").style = "position: absolute; left: 50%; top: 50%; transform:translate(-50%, -50%); color: white; z-index: 100; white-space: nowrap; background: -webkit-linear-gradient(90deg,rgba(255, 0, 0, 1) 0%,rgba(255, 154, 0, 1) 10%,rgba(208, 222, 33, 1) 20%,rgba(79, 220, 74, 1) 30%,rgba(63, 218, 216, 1) 40%,rgba(47, 201, 226, 1) 50%,rgba(28, 127, 238, 1) 60%,rgba(95, 21, 242, 1) 70%,rgba(186, 12, 248, 1) 80%,rgba(251, 7, 217, 1) 90%,rgba(255, 0, 0, 1) 100%);-webkit-background-clip: text; -webkit-text-fill-color: transparent;"
+            document.getElementById("csCenterText").style.fontFamily = "intenseFont";
         }
     }
     cutsceneTime[0] += dt;

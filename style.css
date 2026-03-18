@@ -346,6 +346,7 @@ body {
     color: white;
     transform: translate(-50%,-50%);
     transition: ease 0.5s;
+    overflow-y: scroll;
 }
 #info.active {
     top: 50%;
