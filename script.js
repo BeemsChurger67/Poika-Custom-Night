@@ -87,7 +87,7 @@ let characters = [
     {
         name: "hunajameloni",
         moveTimer: 0,
-        moveTime: 50,
+        moveTime: 60,
         img: "Assets/Characters/hunajameloni.png",
         difficulty: 0,
         element: null,
@@ -901,6 +901,8 @@ function spawnCharacter(cName, difficulty) {
                 rekku.src = ic.rekkuImg;
                 ic.rekkuElement = rekku;
                 document.getElementById("ingameCharacters").appendChild(ic.rekkuElement);
+            } else if (ic.name == "jinku") {
+                ic.element.style.zIndex = 10;
             } else if (ic.name == "korb") {
                 removeKorb = true;
             } else if (ic.name == "neliögd") {
