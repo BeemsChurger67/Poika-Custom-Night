@@ -250,13 +250,14 @@ let characters = [
         killTime: 10,
         leaveTimer: 0,
         leaveTime: 0.5,
+        hyperChange: false,
         img: "Assets/Characters/aateepee.png",
         difficulty: 0,
         element: null,
         frame: false,
         side: "left",
         description: "You have to listen for his sound cue at which door hes on. Close the corresponding door.",
-        hyperDescription: "Hyper: He will immediatly go to the other side"
+        hyperDescription: "Hyper: Once you get rid of him, he returns immediatly.",
     },
     {
         name: "avainportti",
@@ -306,7 +307,7 @@ let characters = [
         difficulty: 0,
         element: null,
         description: "Once you start hearing music, go to cam 6 and click jerpa.",
-        hyperDescription: "Hyper: The music is more faint and harder to hear.",
+        hyperDescription: "Hyper: No more music and his killtimer is a bit shorter.",
     },
     {
         name: "xylo",
@@ -320,7 +321,7 @@ let characters = [
         x: 66,
         element: null,
         description: "He will appear in the office and you have to click him 3 times",
-        hyperDescription: "Hyper: Click him 5 times instead of 3",
+        hyperDescription: "Hyper: Click him 6 times instead of 3",
     },
     {
         name: "rain",
@@ -333,7 +334,7 @@ let characters = [
         active: false,
         element: null,
         description: "Rain will appear in one of either cam 4, 5, 6 and the cam will be highlighted and you need to click him otherwise your power will drain faster",
-        hyperDescription: "Its not highlighted anymore... Its over.....",
+        hyperDescription: "Hyper: He will appear more often.... its over.....",
     },
 ];
 let beemsaManCharacters = [
@@ -513,7 +514,7 @@ window.addEventListener("keypress", (e) => {
             } else {
                 document.getElementById("camOpenAnimation").src = "Assets/camClose.gif";
             }
-            camStaticOpacity = 1;
+            camStaticOpacity = 0.9;
             mask = false; 
             cams.transition = true; 
             cams.animationTimer[0] = 0;
@@ -779,7 +780,7 @@ document.getElementById("camButtons").addEventListener("mousedown", (e) => {
     if (e.target.classList.contains("camButton")) {
         if (cams.cam != Number(e.target.dataset.value)) {
             cams.cam = Number(e.target.dataset.value);
-            camStaticOpacity = 0.9;
+            camStaticOpacity = 0.8;
         }
     }
 });
@@ -1804,6 +1805,7 @@ function ingame(dt) {
                                 ingameCharacters[i] = {...characters[a]};
                             }
                         }
+                        ingameCharacters[i].moveTimer = ingameCharacters[i].moveTime / 1.1;
                         ingameCharacters[i].element = document.getElementById("character_aateepee");
                         soundEffects.bonk.currentTime = 0;
                         soundEffects.bonk.pause();
@@ -1816,6 +1818,8 @@ function ingame(dt) {
                         return;
                     }
                 }
+            } else {
+                ingameCharacters[i].hyperChange = false;
             }
         } else if (ingameCharacters[i].name == "avainportti") {
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1);
@@ -1828,7 +1832,7 @@ function ingame(dt) {
                     die(ingameCharacters[i]);
                     return;
                 }
-                if (mask) {
+                if (!hyperChecked && mask || hyperChecked && mask && keys["f"]) {
                     ingameCharacters[i].leaveTimer += dt;
                     if (ingameCharacters[i].leaveTimer >= ingameCharacters[i].leaveTime) {
                         blackTransitionOpacity = 1.25;
@@ -1860,8 +1864,13 @@ function ingame(dt) {
             ingameCharacters[i].element.style.left = ingameCharacters[i].posX + "%";
             ingameCharacters[i].element.style.top = ingameCharacters[i].posY + "%";
             ingameCharacters[i].element.style.display = "block";
-            ingameCharacters[i].element.style.width = "8vh";
-            ingameCharacters[i].element.style.height = "8vh";
+            if (hyperChecked) {
+                ingameCharacters[i].element.style.width = "13vh";
+                ingameCharacters[i].element.style.height = "13vh";
+            } else {
+                ingameCharacters[i].element.style.width = "8vh";
+                ingameCharacters[i].element.style.height = "8vh";
+            }
             if (merkzKill) {
                 die(ingameCharacters[i]);
                 merkzKill = false;
@@ -1883,7 +1892,7 @@ function ingame(dt) {
             } else {
                 ingameCharacters[i].element.style.display = "none";
             }
-            if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && vents[1]) {
+            if (!hyperChecked && ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && vents[1] || ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && vents[1] && cams.opened && cams.cam == 7 && hyperChecked) {
                 ingameCharacters[i].leaveTimer += dt;
                 if (ingameCharacters[i].leaveTimer >= ingameCharacters[i].leaveTime) {
                     for (let a = 0; a<characters.length; a++) {
@@ -1905,7 +1914,12 @@ function ingame(dt) {
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             ingameCharacters[i].element.style.display = "none";
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
-                soundEffects.jerpa.play();
+                if (hyperChecked) {
+                    ingameCharacters[i].killTimer += dt * 1.2;
+                } else {
+                    ingameCharacters[i].killTimer += dt;
+                    soundEffects.jerpa.play();
+                }
                 if (cams.opened && cams.animationTimer[0] >= 0.15 && cams.cam == 6) {
                     ingameCharacters[i].element.style.left = 50 + document.getElementById("cameraImage").getBoundingClientRect().width / window.innerWidth - camX - window.innerHeight/1080 + "vw";
                     ingameCharacters[i].element.style.top = "50%";
@@ -1953,9 +1967,9 @@ function ingame(dt) {
                     return;
                 }
                 if (removeXylo) {
-                    ingameCharacters[i].count++;
                     ingameCharacters[i].x = Math.random() * 100 + 11.5;
-                    if (ingameCharacters[i].count >= 3) {
+                    ingameCharacters[i].count++;
+                    if (!hyperChecked && ingameCharacters[i].count >= 3 || hyperChecked && ingameCharacters[i].count >= 6) {
                         for (let a = 0; a<characters.length; a++) {
                             if (characters[a].name == ingameCharacters[i].name) {
                                 ingameCharacters[i] = {...characters[a]};
@@ -1967,7 +1981,10 @@ function ingame(dt) {
             }
             removeXylo = false;
         } else if (ingameCharacters[i].name == "rain") {
-            ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
+            if (hyperChecked)
+                ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression * 1.8;
+            else
+                ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             ingameCharacters[i].element.style.display = "none";
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
                 ingameCharacters[i].drainPower += dt / 20;
