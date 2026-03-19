@@ -151,13 +151,15 @@ let characters = [
         element: null,
         mlElement: null,
         mlCam: 0,
+        killSound: soundEffects.shobDeath,
+        voiceLine: soundEffects.shobVoiceline,
         description: "Once he is in the office you need to search the cams to find his makaroonilaatikko. It will appear in a random cam and you have 30 seconds time to find it.",
         hyperDescription: "Hyper: His killtimer is twice as small."
     },
     {
         name: "sinitiainen",
         killTimer: 0,
-        killTime: 10,
+        killTime: 15,
         leaveTimer: 0,
         leaveTime: 1,
         img: "Assets/Characters/sinitiainen.png",
@@ -170,7 +172,7 @@ let characters = [
         camFrame: false,
         active: false,
         description: "When you open cams there is a chance for sinitiainen to appear and fly. You have to click him to get rid of him",
-        hyperDescription: "Hyper: Multiple sinitiainens will appear."
+        hyperDescription: "Hyper: If you close cams when hes active your cooked."
     },
     {
         name: "jape",
@@ -1003,6 +1005,8 @@ function ingame(dt) {
                 ingameCharacters[i].element.style = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0; z-index: 10; pointer-events: none;";
             } else if (ingameCharacters[i].name == "kikkimöö") {
                 ingameCharacters[i].kikkiElements = [];
+            } else if (ingameCharacters[i].name == "jinku") {
+                ingameCharacters[i].element.style.zIndex = 10;
             } else if (ingameCharacters[i].name == "merkz") {
                 ingameCharacters[i].element.style.zIndex = "15";
             } else if (ingameCharacters[i].name == "jape") {
@@ -1375,8 +1379,13 @@ function ingame(dt) {
                 return;
             }
             if (cams.cam == 5 && cams.opened && cams.animationTimer[0] >= 0.15) {
-                if (ingameCharacters[i].moveTimer >= 0)
-                    ingameCharacters[i].moveTimer -= dt * (ingameCharacters[i].difficulty / 10 + 1) * 7.5 * aggression;
+                if (hyperChecked) {
+                    if (ingameCharacters[i].moveTimer >= 0)
+                        ingameCharacters[i].moveTimer -= dt * (ingameCharacters[i].difficulty / 10 + 1) * 3.75 * aggression;
+                } else {
+                    if (ingameCharacters[i].moveTimer >= 0)
+                        ingameCharacters[i].moveTimer -= dt * (ingameCharacters[i].difficulty / 10 + 1) * 7.5 * aggression;
+                }
                 ingameCharacters[i].element.style.display = "block";
                 ingameCharacters[i].element.style.left = ingameCharacters[i].positions[ingameCharacters[i].moveFrame[1]][0] * document.getElementById("cameraImage").getBoundingClientRect().width / window.innerWidth - camX - window.innerHeight/1080 + "vw";
                 ingameCharacters[i].element.style.top = ingameCharacters[i].positions[ingameCharacters[i].moveFrame[1]][1] + "vh";
@@ -1393,12 +1402,20 @@ function ingame(dt) {
             }
             if (!cams.opened && !ingameCharacters[i].closeFrame && !ingameCharacters[i].active) {
                 ingameCharacters[i].closeFrame = true;
-                if (Math.random() > 0.5) {
+                if (hyperChecked) {
                     ingameCharacters[i].x = 0;
                     ingameCharacters[i].y = Math.random() * 100;
                     ingameCharacters[i].active = true;
                     ingameCharacters[i].element.style.width = ingameCharacters[i].size + "vh";
                     ingameCharacters[i].element.style.height = ingameCharacters[i].size * 1.5 + "vh";
+                } else {
+                    if (Math.random() > 0.5) {
+                        ingameCharacters[i].x = 0;
+                        ingameCharacters[i].y = Math.random() * 100;
+                        ingameCharacters[i].active = true;
+                        ingameCharacters[i].element.style.width = ingameCharacters[i].size + "vh";
+                        ingameCharacters[i].element.style.height = ingameCharacters[i].size * 1.5 + "vh";
+                    }
                 }
             }
             if (!cams.opened && ingameCharacters[i].active) {
@@ -1409,7 +1426,11 @@ function ingame(dt) {
             if (ingameCharacters[i].active) {
                 ingameCharacters[i].element.style.left = ingameCharacters[i].x + "%";
                 ingameCharacters[i].element.style.top = ingameCharacters[i].y + "%";
-                ingameCharacters[i].x += dt * (ingameCharacters[i].difficulty / 5 + 1) * 5 * aggression;
+                if (hyperChecked) {
+                    ingameCharacters[i].x += dt * (ingameCharacters[i].difficulty / 5 + 1) * 8 * aggression;
+                } else {
+                    ingameCharacters[i].x += dt * (ingameCharacters[i].difficulty / 5 + 1) * 5 * aggression;
+                }
                 ingameCharacters[i].y -= ingameCharacters[i].gravity * dt * 200;
                 ingameCharacters[i].gravity -= dt * 1.5;
                 if (ingameCharacters[i].y >= 100) {
@@ -1443,7 +1464,7 @@ function ingame(dt) {
                 if (keys["f"] && !cams.opened) {
                     if (!ingameCharacters[i].flashing) {
                         ingameCharacters[i].flashing = true;
-                        ingameCharacters[i].flashAmount[0]++;
+                        if (hyperChecked) ingameCharacters[i].flashAmount[0]+=0.5; else ingameCharacters[i].flashAmount[0]++;
                         if (ingameCharacters[i].flashAmount[0] >= ingameCharacters[i].flashAmount[1]) {
                             for (let a = 0; a<characters.length; a++) {
                                 if (characters[a].name == ingameCharacters[i].name) {
@@ -1480,7 +1501,12 @@ function ingame(dt) {
                     return;
                 }
             } else {
-                ingameCharacters[i].fade = 0;
+                if (hyperChecked) {
+                    if (ingameCharacters[i].fade > 0)
+                        ingameCharacters[i].fade -= dt / 3;
+                } else {
+                    ingameCharacters[i].fade = 0;
+                }
                 ingameCharacters[i].element.style.display = "none";
             }
         } else if (ingameCharacters[i].name == "shob") {
@@ -1506,7 +1532,10 @@ function ingame(dt) {
                 } else {
                     ingameCharacters[i].element.style.display = "none";
                 }
-                ingameCharacters[i].killTimer += dt;
+                if (hyperChecked)
+                    ingameCharacters[i].killTimer += dt * 2;
+                else
+                    ingameCharacters[i].killTimer += dt;
                 if (ingameCharacters[i].mlCam == cams.cam && cams.animationTimer[0] > 0.15 && cams.opened) {
                     ingameCharacters[i].mlElement.style.display = "block";
                     ingameCharacters[i].mlElement.style.left = 50 * document.getElementById("cameraImage").getBoundingClientRect().width / window.innerWidth - camX - window.innerHeight/1080 + "vw";
@@ -1537,13 +1566,8 @@ function ingame(dt) {
             if (ingameCharacters[i].active) {
                 ingameCharacters[i].killTimer += dt * (ingameCharacters[i].difficulty / 5 + 1);
                 if (ingameCharacters[i].killTimer >= ingameCharacters[i].killTime) {
-                    scene = "dead";
-                    death.frame[0] = 0;
-                    death.image = ingameCharacters[i].img;
-                    for (let key in soundEffects) {
-                        soundEffects[key].pause();
-                        soundEffects[key].currentTime = 0;
-                    }
+                    die(ingameCharacters[i]);
+                    return;
                 }
                 ingameCharacters[i].frame += dt;
                 if (ingameCharacters[i].direction == "right") {
@@ -1564,6 +1588,12 @@ function ingame(dt) {
                 ingameCharacters[i].element.style.height = 15 + "vh";
             } else {
                 ingameCharacters[i].element.style.display = "none";
+            }
+            if (hyperChecked) {
+                if (ingameCharacters[i].active && !cams.opened) {
+                    die(ingameCharacters[i]);
+                    return;
+                }
             }
             if (!cams.opened && (cams.animationTimer[0] >= 0.15 && cams.opened)) {
                 ingameCharacters[i].element.style.display = "none";
@@ -1631,7 +1661,7 @@ function ingame(dt) {
                 ingameCharacters[i].element.style.opacity = ingameCharacters[i].fade;
             }
         } else if (ingameCharacters[i].name == "kikkimöö") {
-            ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
+            if (hyperChecked) ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression * 2; else ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
                 ingameCharacters[i].moveTimer = 0;
                 ingameCharacters.push({name: "kiki" + ingameCharacters[i].kikkisAdded});
@@ -1687,7 +1717,7 @@ function ingame(dt) {
                 soundEffects.aatosliina.pause();
                 soundEffects.aatosliina.currentTime = 0;
             }
-            if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && !vents[0] && !cams.opened) {
+            if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime && !vents[0] && !cams.opened && !hyperChecked) {
                 ingameCharacters[i].element.style.display = "block";
             } else {
                 ingameCharacters[i].element.style.display = "none";
@@ -1713,9 +1743,16 @@ function ingame(dt) {
         } else if (ingameCharacters[i].name == "jinku") {
             if (cams.opened && cams.animationTimer[0] >= 0.15 && !ingameCharacters[i].frame) {
                 ingameCharacters[i].frame = true;
-                if (Math.random() > 0.75) {
-                    ingameCharacters[i].active = true;
-                    ingameCharacters[i].camChange = cams.cam;
+                if (hyperChecked) {
+                    if (Math.random() > 0.5) {
+                        ingameCharacters[i].active = true;
+                        ingameCharacters[i].camChange = cams.cam;
+                    }
+                } else {
+                    if (Math.random() > 0.75) {
+                        ingameCharacters[i].active = true;
+                        ingameCharacters[i].camChange = cams.cam;
+                    }
                 }
             }
             if (ingameCharacters[i].active) {
@@ -1739,7 +1776,7 @@ function ingame(dt) {
             if (!cams.opened) {
                 ingameCharacters[i].frame = false;
             }
-            if (!cams.opened) {
+            if (!cams.opened || ingameCharacters[i].camChange != cams.cam && hyperChecked) {
                 if (ingameCharacters[i].active) {
                     die(ingameCharacters[i]);
                     return;
