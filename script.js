@@ -2345,6 +2345,7 @@ let hyperModeChange = false;
 let aggressiveModeChange = false;
 function menu(dt) {
     if (!firstFrame[0]) {
+        hopelessBeemsuit = false;
         easycide = false;
         beemsaMan = false;
         document.getElementById("deathAnimation").style.display = "none";
@@ -2421,9 +2422,9 @@ function dead(dt) {
     if (!firstFrame[2]) {
         deathCounter++;
         if (ingameTimeCounter[1] < 10) {
-            document.getElementById("timeCounter").textContent = "Ingame: " + ":" + ingameTimeCounter[0] + ":0" + Math.floor(ingameTimeCounter[1]);
+            document.getElementById("timeCounter").textContent = "Ingame: " + ingameTimeCounter[0] + ":0" + Math.floor(ingameTimeCounter[1]);
         } else {
-            document.getElementById("timeCounter").textContent = "Ingame: " + ":" + ingameTimeCounter[0] + ":" + Math.floor(ingameTimeCounter[1]);
+            document.getElementById("timeCounter").textContent = "Ingame: " + ingameTimeCounter[0] + ":" + Math.floor(ingameTimeCounter[1]);
         }
         document.getElementById("deathCounter").textContent = "Deaths: " + deathCounter;
         saveProgress();
