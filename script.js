@@ -1805,7 +1805,8 @@ function ingame(dt) {
                                 ingameCharacters[i] = {...characters[a]};
                             }
                         }
-                        ingameCharacters[i].moveTimer = ingameCharacters[i].moveTime / 1.1;
+                        if (hyperChecked)
+                            ingameCharacters[i].moveTimer = ingameCharacters[i].moveTime / 1.1;
                         ingameCharacters[i].element = document.getElementById("character_aateepee");
                         soundEffects.bonk.currentTime = 0;
                         soundEffects.bonk.pause();
