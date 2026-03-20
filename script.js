@@ -1819,8 +1819,6 @@ function ingame(dt) {
                         return;
                     }
                 }
-            } else {
-                ingameCharacters[i].hyperChange = false;
             }
         } else if (ingameCharacters[i].name == "avainportti") {
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1);
@@ -2423,9 +2421,9 @@ function dead(dt) {
     if (!firstFrame[2]) {
         deathCounter++;
         if (ingameTimeCounter[1] < 10) {
-            document.getElementById("timeCounter").textContent = "Ingame: " + ingameTimeCounter[0] + ":0" + Math.floor(ingameTimeCounter[1]);
+            document.getElementById("timeCounter").textContent = "Ingame: " + ":" + ingameTimeCounter[0] + ":0" + Math.floor(ingameTimeCounter[1]);
         } else {
-            document.getElementById("timeCounter").textContent = "Ingame: " + ingameTimeCounter[0] + ":" + Math.floor(ingameTimeCounter[1]);
+            document.getElementById("timeCounter").textContent = "Ingame: " + ":" + ingameTimeCounter[0] + ":" + Math.floor(ingameTimeCounter[1]);
         }
         document.getElementById("deathCounter").textContent = "Deaths: " + deathCounter;
         saveProgress();
