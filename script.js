@@ -1057,8 +1057,14 @@ function ingame(dt) {
         t5Shake = 0;
     }
     if (easycide) {
-        if (displayTime.minutes == 4 && displayTime.seconds >= 19) {
+        if (displayTime.minutes == 4 && displayTime.seconds >= 14) {
             scene = "6AM";
+            blackTransitionOpacity = 0;
+            for (let key in soundEffects) {
+                soundEffects[key].pause();
+                soundEffects[key].currentTime = 0;
+            }
+            return;
         }
     }
     if (beemsaMan) {
@@ -2452,6 +2458,7 @@ function dead(dt) {
                     ingameCharacters[i].killSound.play();
             }
         }
+        document.getElementById("deathText").style.display = "none";
     }
     beemsaManLastMinute = false;
     beemsaManFakeTimer = 0;
@@ -2468,6 +2475,7 @@ function dead(dt) {
         death.red -= dt * 255;
         if (death.red < 0) {
             death.textOpacity += dt;
+            document.getElementById("deathText").style.display = "block"; 
         }
         if (!deathFrame2 && death.red < 50) {
             for (let a = 0; a<ingameCharacters.length; a++) {
