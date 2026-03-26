@@ -258,7 +258,7 @@ let characters = [
         frame: false,
         side: "left",
         description: "You have to listen for his sound cue at which door hes on. Close the corresponding door.",
-        hyperDescription: "Hyper: Once you get rid of him, he returns immediatly.",
+        hyperDescription: "Hyper: Once you get rid of him, his movetime becomes random",
     },
     {
         name: "avainportti",
