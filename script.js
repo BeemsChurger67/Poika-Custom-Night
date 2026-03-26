@@ -9,6 +9,7 @@ const soundEffects = {
     beemsVoiceline:  "Assets/SoundEffects/beemsVoiceline.mp3",
     unkkaFound:  "Assets/SoundEffects/unkkaFound.mp3",
     unkkaVoiceline:  "Assets/SoundEffects/unkkaVoiceline.mp3",
+    nondumbLine:  "Assets/SoundEffects/nondumb.mp3",
     neliöDeath:  "Assets/SoundEffects/neliöDeath.mp3",
     neliöVoiceline:  "Assets/SoundEffects/neliöVoiceline.mp3",
     shobDeath:  "Assets/SoundEffects/shobDeath.mp3",
@@ -1461,6 +1462,9 @@ function ingame(dt) {
         } else if (ingameCharacters[i].name == "nondari") {
             ingameCharacters[i].moveTimer += dt * (ingameCharacters[i].difficulty / 5 + 1) * aggression;
             if (ingameCharacters[i].moveTimer >= ingameCharacters[i].moveTime) {
+                if (ingameCharacters[i].moveTimer <= ingameCharacters[i].moveTime + 0.5) {
+                    soundEffects.nondumbLine.play();
+                }
                 if (!cams.opened) {
                     ingameCharacters[i].element.style.left = 65 -mx / window.innerWidth * 33 + "vw";
                     ingameCharacters[i].element.style.top = 60 + "%";
@@ -1470,7 +1474,7 @@ function ingame(dt) {
                 } else {
                     ingameCharacters[i].element.style.display = "none";
                 }
-                if (keys["f"] && !cams.opened) {
+                if (keys["f"] && !cams.opened) { 
                     if (!ingameCharacters[i].flashing) {
                         ingameCharacters[i].flashing = true;
                         if (hyperChecked) ingameCharacters[i].flashAmount[0]+=0.5; else ingameCharacters[i].flashAmount[0]++;
@@ -1812,7 +1816,7 @@ function ingame(dt) {
                             }
                         }
                         if (hyperChecked)
-                            ingameCharacters[i].moveTimer = ingameCharacters[i].moveTime / 1.1;
+                            ingameCharacters[i].moveTimer = ingameCharacters[i].moveTime / (Math.random() + 2);
                         ingameCharacters[i].element = document.getElementById("character_aateepee");
                         soundEffects.bonk.currentTime = 0;
                         soundEffects.bonk.pause();
