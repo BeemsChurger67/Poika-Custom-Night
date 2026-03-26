@@ -30,6 +30,7 @@ const soundEffects = {
     T4: "Assets/SoundEffects/T4.mp3",
     bmc: "Assets/SoundEffects/bmc.mp3",
     easycideTheme: "Assets/SoundEffects/easycideTheme.mp3",
+    ingameAmbience: "Assets/SoundEffects/ingameAmbience.mp3",
 } 
 for (let i in soundEffects) {
     soundEffects[i] = new Audio(soundEffects[i]);
@@ -1021,6 +1022,7 @@ function ingame(dt) {
                 document.getElementById("beemsaTimer").style.display = "block";
             }
         }
+        soundEffects.ingameAmbience.play();
         if (beemsaMan) {
             soundEffects.clock1.preservesPitch = false;
             soundEffects.clock2.preservesPitch = false;
